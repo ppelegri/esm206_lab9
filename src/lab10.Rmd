@@ -1,0 +1,58 @@
+---
+title: "Vegetation"
+author: "Patrick Pelegri-O'Day"
+date: "11/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(usethis)
+library(beepr)
+library(praise)
+library(cowsay)
+library(paletteer)
+library(janitor)
+library(sf)
+```
+
+## beepr::beep()
+
+```{r}
+beep(11)
+```
+
+Use `beep()` to give yourself an audio alert.
+
+## for loop + beep
+
+```{r, eval = FALSE}
+for (i in rev(seq(1:999))) {
+  print(paste(i, "bottles of beer on the wall"))
+}
+
+beep(4)
+```
+
+## praise is nice
+
+```{r}
+praise("${EXCLAMATION}!!! this code works ${adverb_manner}!")
+
+praise("Holy ${creating}, Batman - this code works ${adverb_manner}!")
+```
+
+##cowsay::say to have characters say something
+
+```{r}
+say("I love tacos!", by = "hypnotoad")
+```
+
+## usethis for everything
+
+```{r}
+cowsay::say(praise::praise("You are ${adjective}!", by = "mushroom"))
+```
+
