@@ -16,6 +16,7 @@ library(cowsay)
 library(paletteer)
 library(janitor)
 library(sf)
+library(here)
 ```
 
 ## beepr::beep()
@@ -53,6 +54,107 @@ say("I love tacos!", by = "hypnotoad")
 ## usethis for everything
 
 ```{r}
-cowsay::say(praise::praise("You are ${adjective}!", by = "mushroom"))
+cowsay::say(praise::praise("You are ${adjective}!"), by = "spider")
+```
+
+R project first, then git & GitHub repo
+
+- usethis::use_git()
+- usethis::use_github()
+
+## palatteer: aggregated color palettes
+
+```{r}
+calecopal <- palettes_d_names %>% 
+  filter(package == "calecopal")
+```
+
+
+```{r}
+storms %>% 
+  group_by(name) %>% 
+  summarize(min_pressure = min(pressure, na.rm = T)) %>% 
+  slice_min(n = 10, min_pressure) %>% 
+  ggplot(aes(x = min_pressure, y = name)) +
+           geom_col(aes(fill = name)) +
+  scale_fill_paletteer_d("colorBlindness::Blue2OrangeRed14Steps")
+```
+
+## Map of Jornada LtER
+
+```{r}
+jornada_veg <- read_sf(here("data", "jornada_basin_lter.kml")) %>% 
+  select(Name) %>% 
+  clean_names()
+
+ggplot() + 
+  geom_sf(data = jornada_veg, aes(fill = name), color = NA) +
+  theme_minimal() + 
+  scale_fill_paletteer_d("ggthemes::manyeys") +
+  labs(title = "Joranda Basin lter Vegetation")
+
+ggsave(filename = "my_awesome_jornada_map.png", width = 8, height = 5)
+
+# each vegetation type has a different fill color
+```
+
+
+
+
+Data viz for 240
+```{r}
+rounds <- c(1, 2, 3, 4, 5, 6, 7)
+
+F_AM_marketing <- c(4.5, 4, 9, 11.5, 14.7, 12.7, 12.3)
+F_EU_marketing <- c(0, 3.6, 5.2, 6, 8.2, 4.7, 9.4)
+F_AP_marketing <- c(0, 2.5, 6.6, 6, 8.2, 4.7, 9.4)
+
+F_AM_profit <- c(1.5, 3.3, 5.3, 2.6, -1.4, 2.9, 2.9)
+F_EU_profit <- c(0, -0.1, 0.5, 1.8, -0.6, -1.3, -1.3)
+F_AP_profit <- c(0, -1, -1.5, 0, 3.1, 6.6, 13.8)
+
+C_AM_marketing <- c(6, 8.1, 11, 18.9, 16.5, 16.6, 16.5)
+C_EU_marketing <- c(3.4, 4.3, 7.8, 8, 10.9, 11, 11.8)
+C_AP_marketing <- c(0, 2, 1.9, 3.3, 11, 11.9, 13)
+
+C_AM_profit <- c(5, 7.9, 10.9, 11.7, 15.9, 10, 4.3)
+C_EU_profit <- c(0.2, 0.6, 1.3, 5.9, 5.6, 6.8, 6.7)
+C_AP_profit <- c(0, 1.7, 0.7, 1.5, 4.2, 12.7, 16.9)
+
+E_AM_marketing <- c(6.3, 9.2, 9.1, 10.8, 13, 16, 15.6)
+E_EU_marketing <- c(3.7, 6.9, 6.7, 6.9, 7.5, 9.5, 13.3)
+E_AP_marketing <- c(0, 2.6, 4, 4.2, 7.9, 10.5, 13.8)
+
+E_AM_profit <- c(3.1, 0.4, 6.4, 5.3, -1, 3.1, 0.7)
+E_EU_profit <- c(-0.2, -1.2, 0.5, 2.5, 2, 1.7, 6.1)
+E_AP_profit <- c(0, -1.8, 1.3, 0.5, 1.4, 6.8, 12.8)
+
+capsim_reg_analysis <- 
+  data.frame(rounds, F_AM_marketing, F_AM_profit, 
+             C_AM_marketing, C_AM_profit, 
+             E_AM_marketing, E_AM_profit, 
+             F_EU_marketing, F_EU_profit,
+             C_EU_marketing, C_EU_profit,
+             E_EU_marketing, E_EU_profit,
+             F_AP_marketing, F_AP_profit,
+             C_AP_marketing, C_AP_profit,
+             E_AP_marketing, E_AP_profit)
+```
+
+
+Another attempt
+```{r}
+rounds <- c(1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7)
+
+type <- c("Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Marketing", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit", "Profit")
+
+region <- c("AM", "AM", "AM", "AM", "AM", "AM", "AM", "EU", "EU", "EU", "EU", "EU", "EU", "EU", "AP", "AP", "AP", "AP", "AP", "AP", "AP", "AM", "AM", "AM", "AM", "AM", "AM", "AM", "EU", "EU", "EU", "EU", "EU", "EU", "EU", "AP", "AP", "AP", "AP", "AP", "AP", "AP", "AM", "AM", "AM", "AM", "AM", "AM", "AM", "EU", "EU", "EU", "EU", "EU", "EU", "EU", "AP", "AP", "AP", "AP", "AP", "AP", "AP", "AM", "AM", "AM", "AM", "AM", "AM", "AM", "EU", "EU", "EU", "EU", "EU", "EU", "EU", "AP", "AP", "AP", "AP", "AP", "AP", "AP", "AM", "AM", "AM", "AM", "AM", "AM", "AM", "EU", "EU", "EU", "EU", "EU", "EU", "EU", "AP", "AP", "AP", "AP", "AP", "AP", "AP", "AM", "AM", "AM", "AM", "AM", "AM", "AM", "EU", "EU", "EU", "EU", "EU", "EU", "EU", "AP", "AP", "AP", "AP", "AP", "AP", "AP")
+
+company <- c("Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Ferris", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Chester", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie", "Erie")
+
+value <- c(4.5, 4, 9, 11.5, 14.7, 12.7, 12.3, 0, 3.6, 5.2, 6, 8.2, 4.7, 9.4, 0, 2.5, 6.6, 6, 8.2, 4.7, 9.4, 1.5, 3.3, 5.3, 2.6, -1.4, 2.9, 2.9, 0, -0.1, 0.5, 1.8, -0.6, -1.3, -1.3, 0, -1, -1.5, 0, 3.1, 6.6, 13.8, 6, 8.1, 11, 18.9, 16.5, 16.6, 16.5, 3.4, 4.3, 7.8, 8, 10.9, 11, 11.8, 0, 2, 1.9, 3.3, 11, 11.9, 13, 5, 7.9, 10.9, 11.7, 15.9, 10, 4.3, 0.2, 0.6, 1.3, 5.9, 5.6, 6.8, 6.7, 0, 1.7, 0.7, 1.5, 4.2, 12.7, 16.9, 6.3, 9.2, 9.1, 10.8, 13, 16, 15.6, 3.7, 6.9, 6.7, 6.9, 7.5, 9.5, 13.3, 0, 2.6, 4, 4.2, 7.9, 10.5, 13.8, 3.1, 0.4, 6.4, 5.3, -1, 3.1, 0.7, -0.2, -1.2, 0.5, 2.5, 2, 1.7, 6.1, 0, -1.8, 1.3, 0.5, 1.4, 6.8, 12.8)
+
+capsim_analysis <-
+  data.frame(rounds, value, company, type, region)
 ```
 
