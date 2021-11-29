@@ -158,3 +158,20 @@ capsim_analysis <-
   data.frame(rounds, value, company, type, region)
 ```
 
+Plot!
+```{r}
+capsim_marketing <- capsim_analysis %>% 
+  filter(type == "Marketing")
+
+capsim_profits <- capsim_analysis %>% 
+  filter(type == "Profit")
+
+ggplot(capsim_marketing) +
+  geom_line(aes(x = rounds, y = value, color = company)) +
+  facet_wrap(~region)
+
+ggplot(capsim_profits) +
+  geom_line(aes(x = rounds, y = value, color = company)) +
+  facet_wrap(~region)
+```
+
